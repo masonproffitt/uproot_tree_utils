@@ -3,18 +3,22 @@ import numpy as np
 import uproot
 
 
-def clone_tree(tree, new_file_name, new_tree_name=None, selection=None, new_branches=None):
+def clone_tree(tree, new_file_name, new_tree_name=None, branches=None, selection=None, new_branches=None):
     if new_tree_name is None:
         new_tree_name = tree.name.decode('utf-8')
+    if branches is None:
+        branch_names = list(map(lambda b: b.decode('utf-8'), tree.keys()))
+    else:
+        branch_names = branches
     branch_definition_dictionary = dict()
     branch_content_dictionary = dict()
-    for branch in tree.values():
-        name = branch.name.decode('utf-8')
+    for name in branch_names:
+        branch = tree[name]
         if isinstance(branch.interpretation.type, np.dtype):
             branch_definition_dictionary[name] = uproot.newbranch(branch.interpretation.type)
         elif isinstance(branch.interpretation.content.type, np.dtype):
             size_name = name + '_n'
-            while bytes(size_name, 'utf-8') in tree.keys():
+            while size_name in branch_names:
                 size_name += '0'
             branch_definition_dictionary[name] = uproot.newbranch(branch.interpretation.content.type, size=size_name)
             if selection is not None:
@@ -34,7 +38,7 @@ def clone_tree(tree, new_file_name, new_tree_name=None, selection=None, new_bran
                 branch_definition_dictionary[name] = uproot.newbranch(content.dtype)
             elif isinstance(content.content, np.ndarray):
                 size_name = name + '_n'
-                while bytes(size_name, 'utf-8') in tree.keys() or size_name in new_branches.keys():
+                while size_name in branch_names + list(new_branches.keys()):
                     size_name += '0'
                 branch_definition_dictionary[name] = uproot.newbranch(content.content.dtype, size=size_name)
                 branch_content_dictionary[size_name] = content.count()

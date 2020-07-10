@@ -120,3 +120,21 @@ def test_new_vector_branch():
     finally:
         if os.path.isfile(new_file_name):
             os.remove(new_file_name)
+
+
+def test_select_branches():
+    original_file = uproot.open('tests/scalars_tree_file.root')
+    tree_name = 'tree'
+    original_tree = original_file[tree_name]
+    new_file_name = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
+    try:
+        branch_list = ['float_branch', 'bool_branch']
+        clone_tree(original_tree, new_file_name, branches=branch_list)
+        new_file = uproot.open(new_file_name)
+        new_tree = new_file[tree_name]
+        assert set(map(lambda b: b.decode('utf-8'), new_tree.keys())) == set(branch_list)
+        assert np.allclose(new_tree['float_branch'].array(), [0.0, 3.3])
+        assert new_tree['bool_branch'].array().tolist() == [False, True]
+    finally:
+        if os.path.isfile(new_file_name):
+            os.remove(new_file_name)
