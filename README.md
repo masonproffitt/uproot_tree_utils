@@ -25,8 +25,8 @@ This will simply copy the entire tree from the original file to a new file (with
 - `new_tree_name` can be used to give the new tree a different name. The default is the original tree's name.
 - `branches` can be a list of strings representing the branches to copy. Only the selected branches will be in the new file.
 - `selection` is an optional array determining which events to copy. This can be a boolean mask or integers corresponding to the desired event indices.
-- `new_branches` allows the user to pass a dictionary of new branches to insert into the tree. The format for each dictionary entry should be `{'new_branch_name': array_with_branch_data}`.
+- `new_branches` allows the user to pass a dictionary of new branches to insert into the tree. The format for the dictionary should be `{'new_branch_name': array_with_branch_data}`.
 
 ## Limitations
 
-Not all branch types can be written by uproot. The types tested so far are `int`, `long`, `float`, `double`, `bool`, `vector<int>`, `vector<float>`, and `vector<double>`. Further nesting of vectors (e.g., `vector<vector<int> >`) is not yet supported by uproot's tree writing. There are also some known bugs with `vector<long>` and `vector<bool>`. `string` and `vector<string>` should be possible but are a bit trickier and haven't been implemented in this utility package yet.
+Not all branch types can be written by uproot. The types tested so far are `int`, `long`, `float`, `double`, `bool`, `vector<int>`, `vector<float>`, and `vector<double>`. Further nesting of vectors (e.g. `vector<vector<int> >`) is not yet supported by uproot's tree writing. There are also some known bugs with `vector<long>` and `vector<bool>`. `string` and `vector<string>` should be possible but are a bit trickier and haven't been implemented in this utility package yet.
