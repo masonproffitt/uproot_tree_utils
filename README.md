@@ -7,25 +7,25 @@ A small collection of utilities for handling ROOT TTrees with uproot.
 The only function currently in the package is `clone_tree()`. The full function signature is
 
 ```python
-clone_tree(tree, new_file_name, new_tree_name=None, branches=None, selection=None, new_branches=None)
+clone_tree(tree, new_filename, new_treename=None, branches=None, selection=None, new_branches=None)
 ```
 
-The required arguments `tree` and `new_file_name` are the TTree object to copy from (as retrieved by uproot) and the file to copy to, respectively. The simplest usage looks like
+The required arguments `tree` and `new_filename` are the TTree object to copy from (as retrieved by uproot) and the file to copy to, respectively. The simplest usage looks like
 
 ```python
 import uproot
 from uproot_tree_utils import clone_tree
 
 file = uproot.open('some_root_file.root')
-clone_tree(file['the_tree_name'], 'a_new_file_name.root')
+clone_tree(file['the_treename'], 'a_new_filename.root')
 ```
 
 This will simply copy the entire tree from the original file to a new file (with no other objects).
 
-- `new_tree_name` can be used to give the new tree a different name. The default is the original tree's name.
+- `new_treename` can be used to give the new tree a different name. The default is the original tree's name.
 - `branches` can be a list of strings representing the branches to copy. Only the selected branches will be in the new file.
 - `selection` is an optional array determining which events to copy. This can be a boolean mask or integers corresponding to the desired event indices.
-- `new_branches` allows the user to pass a dictionary of new branches to insert into the tree. The format for the dictionary should be `{'new_branch_name': array_with_branch_data}`.
+- `new_branches` allows the user to pass a dictionary of new branches to insert into the tree. The format for the dictionary should be `{'new_branchname': array_with_branch_data}`.
 
 ## Limitations
 

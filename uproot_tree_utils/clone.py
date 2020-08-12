@@ -3,22 +3,22 @@ import numpy as np
 import uproot
 
 
-def clone_tree(tree, new_file_name, new_tree_name=None, branches=None, selection=None, new_branches=None):
-    if new_tree_name is None:
-        new_tree_name = tree.name.decode('utf-8')
+def clone_tree(tree, new_filename, new_treename=None, branches=None, selection=None, new_branches=None):
+    if new_treename is None:
+        new_treename = tree.name.decode('utf-8')
     if branches is None:
-        branch_names = list(map(lambda b: b.decode('utf-8'), tree.keys()))
+        branchnames = list(map(lambda b: b.decode('utf-8'), tree.keys()))
     else:
-        branch_names = branches
+        branchnames = branches
     branch_definition_dictionary = dict()
     branch_content_dictionary = dict()
-    for name in branch_names:
+    for name in branchnames:
         branch = tree[name]
         if isinstance(branch.interpretation.type, np.dtype):
             branch_definition_dictionary[name] = uproot.newbranch(branch.interpretation.type)
         elif isinstance(branch.interpretation.content.type, np.dtype):
             size_name = name + '_n'
-            while size_name in branch_names:
+            while size_name in branchnames:
                 size_name += '0'
             branch_definition_dictionary[name] = uproot.newbranch(branch.interpretation.content.type, size=size_name)
             if selection is not None:
@@ -38,13 +38,13 @@ def clone_tree(tree, new_file_name, new_tree_name=None, branches=None, selection
                 branch_definition_dictionary[name] = uproot.newbranch(content.dtype)
             elif isinstance(content.content, np.ndarray):
                 size_name = name + '_n'
-                while size_name in branch_names + list(new_branches.keys()):
+                while size_name in branchnames + list(new_branches.keys()):
                     size_name += '0'
                 branch_definition_dictionary[name] = uproot.newbranch(content.content.dtype, size=size_name)
                 branch_content_dictionary[size_name] = content.count()
             else:
                 raise NotImplementedError('Branch type (' + str(type(content)) + ') not supported')
             branch_content_dictionary[name] = content
-    with uproot.recreate(new_file_name) as new_file:
-        new_file[new_tree_name] = uproot.newtree(branch_definition_dictionary)
-        new_file[new_tree_name].extend(branch_content_dictionary)
+    with uproot.recreate(new_filename) as new_file:
+        new_file[new_treename] = uproot.newtree(branch_definition_dictionary)
+        new_file[new_treename].extend(branch_content_dictionary)
