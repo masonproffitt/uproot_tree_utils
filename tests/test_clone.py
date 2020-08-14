@@ -10,8 +10,8 @@ import uproot
 from uproot_tree_utils import clone_tree
 
 
-def test_scalars():
-    original_file = uproot.open('tests/scalars_tree_file.root')
+def test_signed_integer_scalars():
+    original_file = uproot.open('tests/signed_integer_scalars_tree_file.root')
     treename = 'tree'
     original_tree = original_file[treename]
     new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
@@ -19,11 +19,43 @@ def test_scalars():
         clone_tree(original_tree, new_filename)
         new_file = uproot.open(new_filename)
         new_tree = new_file[treename]
-        assert new_tree['int_branch'].array().tolist() == [0, -1]
-        assert new_tree['long_branch'].array().tolist() == [0, -2]
-        assert np.allclose(new_tree['float_branch'].array(), [0.0, 3.3])
-        assert np.allclose(new_tree['double_branch'].array(), [0.0, 4.4])
-        assert new_tree['bool_branch'].array().tolist() == [False, True]
+        assert new_tree['char_t_branch'].array().tolist() == [0, 1, -13]
+        assert new_tree['short_t_branch'].array().tolist() == [0, 3, -15]
+        assert new_tree['int_t_branch'].array().tolist() == [0, 5, -17]
+        assert new_tree['long64_t_branch'].array().tolist() == [0, 11, -23]
+    finally:
+        if os.path.isfile(new_filename):
+            os.remove(new_filename)
+
+
+def test_floating_point_scalars():
+    original_file = uproot.open('tests/floating_point_scalars_tree_file.root')
+    treename = 'tree'
+    original_tree = original_file[treename]
+    new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
+    try:
+        clone_tree(original_tree, new_filename)
+        new_file = uproot.open(new_filename)
+        new_tree = new_file[treename]
+        assert np.allclose(new_tree['float_t_branch'].array(), [0.0, 7.7, -19.19])
+        assert np.allclose(new_tree['float16_t_branch'].array(), [0.0, 8.8, -20.20])
+        assert np.allclose(new_tree['double_t_branch'].array(), [0.0, 9.9, -21.21])
+        assert np.allclose(new_tree['double32_t_branch'].array(), [0.0, 10.10, -22.22])
+    finally:
+        if os.path.isfile(new_filename):
+            os.remove(new_filename)
+
+
+def test_boolean_scalars():
+    original_file = uproot.open('tests/boolean_scalars_tree_file.root')
+    treename = 'tree'
+    original_tree = original_file[treename]
+    new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
+    try:
+        clone_tree(original_tree, new_filename)
+        new_file = uproot.open(new_filename)
+        new_tree = new_file[treename]
+        assert new_tree['bool_t_branch'].array().tolist() == [False, True, False]
     finally:
         if os.path.isfile(new_filename):
             os.remove(new_filename)
