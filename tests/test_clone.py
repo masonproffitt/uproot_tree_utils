@@ -80,6 +80,22 @@ def test_signed_integer_vectors():
             os.remove(new_filename)
 
 
+def test_floating_point_vectors():
+    original_file = uproot.open('tests/floating_point_vectors_tree_file.root')
+    treename = 'tree'
+    original_tree = original_file[treename]
+    new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
+    try:
+        clone_tree(original_tree, new_filename)
+        new_file = uproot.open(new_filename)
+        new_tree = new_file[treename]
+        assert abs(new_tree['float_vector_branch'].array() - awkward.fromiter([[], [-31.31, 32.32, 33.33], [-47.47]])).max().max() < 1e-5
+        assert abs(new_tree['double_vector_branch'].array() - awkward.fromiter([[], [-34.34, 35.35, 36.36], [-48.48]])).max().max() < 1e-5
+    finally:
+        if os.path.isfile(new_filename):
+            os.remove(new_filename)
+
+
 def test_vectors():
     original_file = uproot.open('tests/vectors_tree_file.root')
     treename = 'tree'
