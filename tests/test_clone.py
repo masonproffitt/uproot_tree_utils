@@ -61,6 +61,25 @@ def test_boolean_scalars():
             os.remove(new_filename)
 
 
+def test_signed_integer_vectors():
+    original_file = uproot.open('tests/signed_integer_vectors_tree_file.root')
+    treename = 'tree'
+    original_tree = original_file[treename]
+    new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
+    try:
+        clone_tree(original_tree, new_filename)
+        new_file = uproot.open(new_filename)
+        new_tree = new_file[treename]
+        # assert new_tree['char_vector_branch'].array().tolist() == [[], [-1, 2, 3], [-37]]
+        assert new_tree['short_vector_branch'].array().tolist() == [[], [-7, 8, 9], [-39]]
+        assert new_tree['int_vector_branch'].array().tolist() == [[], [-13, 14, 15], [-41]]
+        assert new_tree['long_vector_branch'].array().tolist() == [[], [-19, 20, 21], [-43]]
+        # assert new_tree['long64_t_vector_branch'].array().tolist() == [[], [-25, 26, 27], [-45]]
+    finally:
+        if os.path.isfile(new_filename):
+            os.remove(new_filename)
+
+
 def test_vectors():
     original_file = uproot.open('tests/vectors_tree_file.root')
     treename = 'tree'
