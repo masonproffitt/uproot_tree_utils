@@ -17,6 +17,10 @@ def clone_tree(tree, new_filename, new_treename=None, branches=None, selection=N
         if isinstance(branch.interpretation.type, np.dtype):
             branch_definition_dictionary[name] = uproot.newbranch(branch.interpretation.type)
         elif isinstance(branch.interpretation.content.type, np.dtype):
+            if branch.interpretation.content.type == np.dtype('int64'):
+                raise NotImplementedError('Jagged arrays of 64-bit integers are not yet supported'
+                                          ' due to a known bug in the tree-writing code'
+                                          ' (https://github.com/scikit-hep/uproot/issues/506).')
             size_name = name + '_n'
             while size_name in branchnames:
                 size_name += '0'
@@ -37,6 +41,12 @@ def clone_tree(tree, new_filename, new_treename=None, branches=None, selection=N
             if isinstance(content, np.ndarray) and len(content.shape) == 1:
                 branch_definition_dictionary[name] = uproot.newbranch(content.dtype)
             elif isinstance(content.content, np.ndarray):
+                if branch.interpretation.content.type == np.dtype('int64'):
+                    raise NotImplementedError('Jagged arrays of 64-bit integers are not yet'
+                                              ' supported due to a known bug in the tree-writing'
+                                              ' code'
+                                              ' (https://github.com/scikit-hep/uproot/issues/506)'
+                                              '.')
                 size_name = name + '_n'
                 while size_name in branchnames + list(new_branches.keys()):
                     size_name += '0'
