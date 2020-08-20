@@ -1,5 +1,7 @@
 # uproot_tree_utils
 
+[![codecov](https://codecov.io/gh/masonproffitt/uproot_tree_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/masonproffitt/uproot_tree_utils)
+
 A small collection of utilities for handling ROOT TTrees with uproot.
 
 ## Usage
