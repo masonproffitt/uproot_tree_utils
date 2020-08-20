@@ -45,6 +45,4 @@ Currently supported branch types:
 - `std::vector<float>`
 - `std::vector<double>`
 
-Character strings, unsigned integers, `vector<char>`, and `vector<bool>` are not yet supported.  
-There are also some known bugs with `vector<long>` and `vector<long long>`.  
-Further nesting of vectors (e.g. `vector<vector<int> >`) is not supported by uproot's tree writing.
+Character strings, unsigned integers, `vector<char>`, and `vector<bool>` are not yet supported. There are also some known bugs with `vector<long>` and `vector<long long>`. Further nesting of vectors (e.g. `vector<vector<int> >`) is not supported by uproot's tree writing.
