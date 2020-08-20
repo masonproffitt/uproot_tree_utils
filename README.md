@@ -29,4 +29,22 @@ This will simply copy the entire tree from the original file to a new file (with
 
 ## Limitations
 
-Not all branch types can be written by uproot. The types tested so far are `char`, `short`, `int`, `long`, `long long`, `float`, `double`, `bool`, `vector<short>`, `vector<int>`, `vector<float>`, and `vector<double>`. Further nesting of vectors (e.g. `vector<vector<int> >`) is not yet supported by uproot's tree writing. There are also some known bugs with `vector<long>` and `vector<bool>`. `string` and `vector<string>` should be possible but are a bit trickier and haven't been implemented in this utility package yet.
+Not all branch types can be written by uproot.
+
+Currently supported branch types:
+
+- `Char_t`/`char`
+- `Short_t`/`short`
+- `Int_t`/`int`
+- `Float_t`/`float`
+- `Double_t`/`double`
+- `Long64_t`/`long long`
+- `Bool_t`/`bool`
+- `std::vector<short>`
+- `std::vector<int>`
+- `std::vector<float>`
+- `std::vector<double>`
+
+Character strings, unsigned integers, `vector<char>`, and `vector<bool>` are not yet supported.  
+There are also some known bugs with `vector<long>` and `vector<long long>`.  
+Further nesting of vectors (e.g. `vector<vector<int> >`) is not supported by uproot's tree writing.
