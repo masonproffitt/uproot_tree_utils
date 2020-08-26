@@ -41,7 +41,7 @@ def clone_tree(tree, new_filename, new_treename=None, branches=None, selection=N
             if isinstance(content, np.ndarray) and len(content.shape) == 1:
                 branch_definition_dictionary[name] = uproot.newbranch(content.dtype)
             elif isinstance(content.content, np.ndarray):
-                if branch.interpretation.content.type == np.dtype('int64'):
+                if content.content.dtype == np.dtype('int64'):
                     raise NotImplementedError('Jagged arrays of 64-bit integers are not yet'
                                               ' supported due to a known bug in the tree-writing'
                                               ' code'
