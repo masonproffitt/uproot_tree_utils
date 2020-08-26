@@ -174,7 +174,7 @@ def test_new_vector_branch():
     original_tree = original_file[treename]
     new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
     try:
-        new_branch_dictionary = {'new_int_vector_branch': awkward.fromiter([[1], [2, 3], []])}
+        new_branch_dictionary = {'new_int_vector_branch': awkward.fromiter([[1], [2, 3], []]).astype(np.dtype('int32'))}
         clone_tree(original_tree, new_filename, new_branches=new_branch_dictionary)
         new_file = uproot.open(new_filename)
         new_tree = new_file[treename]
