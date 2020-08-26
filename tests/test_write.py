@@ -3,6 +3,8 @@ import os
 
 import numpy as np
 
+import uproot
+
 from uproot_tree_utils import write_tree
 
 
