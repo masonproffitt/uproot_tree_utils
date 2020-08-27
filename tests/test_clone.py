@@ -195,8 +195,12 @@ def test_new_vector_branch():
     try:
         new_branch_dictionary = {'new_int16_vector_branch': awkward.fromiter([[-1], [-2, 3], []]).astype(np.dtype('int16')),
                                  'new_int32_vector_branch': awkward.fromiter([[-4], [-5, 6], []]).astype(np.dtype('int32')),
-                                 'new_float32_vector_branch': awkward.fromiter([[-7.7], [-8.8, 9.9], []]).astype(np.dtype('float32')),
-                                 'new_float64_vector_branch': awkward.fromiter([[-10.10], [-11.11, 12.12], []]).astype(np.dtype('float64'))}
+                                 'new_float32_vector_branch': awkward.fromiter([[-7.7],
+                                                                                [-8.8, 9.9],
+                                                                                []]).astype(np.dtype('float32')),
+                                 'new_float64_vector_branch': awkward.fromiter([[-10.10],
+                                                                                [-11.11, 12.12],
+                                                                                []]).astype(np.dtype('float64'))}
         clone_tree(original_tree, new_filename, new_branches=new_branch_dictionary)
         new_file = uproot.open(new_filename)
         new_tree = new_file[treename]
@@ -212,9 +216,13 @@ def test_new_vector_branch():
         assert new_tree['new_int32_vector_branch'].array()[0].dtype == np.dtype('int32')
         assert new_tree['new_int32_vector_branch'].array().tolist() == [[-4], [-5, 6], []]
         assert new_tree['new_float32_vector_branch'].array()[0].dtype == np.dtype('float32')
-        assert abs(new_tree['new_float32_vector_branch'].array() - awkward.fromiter([[-7.7], [-8.8, 9.9], []])).max().max() < 1e-5
+        assert abs(new_tree['new_float32_vector_branch'].array() - awkward.fromiter([[-7.7],
+                                                                                     [-8.8, 9.9],
+                                                                                     []])).max().max() < 1e-5
         assert new_tree['new_float64_vector_branch'].array()[0].dtype == np.dtype('float64')
-        assert abs(new_tree['new_float64_vector_branch'].array() - awkward.fromiter([[-10.10], [-11.11, 12.12], []])).max().max() < 1e-5
+        assert abs(new_tree['new_float64_vector_branch'].array() - awkward.fromiter([[-10.10],
+                                                                                     [-11.11, 12.12],
+                                                                                     []])).max().max() < 1e-5
     finally:
         if os.path.isfile(new_filename):
             os.remove(new_filename)
