@@ -153,7 +153,13 @@ def test_new_scalar_branch():
     original_tree = original_file[treename]
     new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
     try:
-        new_branch_dictionary = {'new_int_branch': np.array([5, 6])}
+        new_branch_dictionary = {'new_int8_branch': np.array([-5, 6], dtype='int8'),
+                                 'new_int16_branch': np.array([-7, 8], dtype='int16'),
+                                 'new_int32_branch': np.array([-9, 10], dtype='int32'),
+                                 'new_int64_branch': np.array([-11, 12], dtype='int64'),
+                                 'new_float32_branch': np.array([-13.13, 14.14], dtype='float32'),
+                                 'new_float64_branch': np.array([-15.15, 16.16], dtype='float64'),
+                                 'new_bool_branch': np.array([True, False])}
         clone_tree(original_tree, new_filename, new_branches=new_branch_dictionary)
         new_file = uproot.open(new_filename)
         new_tree = new_file[treename]
@@ -162,7 +168,20 @@ def test_new_scalar_branch():
         assert np.allclose(new_tree['float_branch'].array(), [0.0, 3.3])
         assert np.allclose(new_tree['double_branch'].array(), [0.0, 4.4])
         assert new_tree['bool_branch'].array().tolist() == [False, True]
-        assert new_tree['new_int_branch'].array().tolist() == [5, 6]
+        assert new_tree['new_int8_branch'].array()[0].dtype == np.dtype('int8')
+        assert new_tree['new_int8_branch'].array().tolist() == [-5, 6]
+        assert new_tree['new_int16_branch'].array()[0].dtype == np.dtype('int16')
+        assert new_tree['new_int16_branch'].array().tolist() == [-7, 8]
+        assert new_tree['new_int32_branch'].array()[0].dtype == np.dtype('int32')
+        assert new_tree['new_int32_branch'].array().tolist() == [-9, 10]
+        assert new_tree['new_int64_branch'].array()[0].dtype == np.dtype('int64')
+        assert new_tree['new_int64_branch'].array().tolist() == [-11, 12]
+        assert new_tree['new_float32_branch'].array()[0].dtype == np.dtype('float32')
+        assert np.allclose(new_tree['new_float32_branch'].array(), [-13.13, 14.14])
+        assert new_tree['new_float64_branch'].array()[0].dtype == np.dtype('float64')
+        assert np.allclose(new_tree['new_float64_branch'].array(), [-15.15, 16.16])
+        assert new_tree['new_bool_branch'].array()[0].dtype == np.dtype('bool')
+        assert new_tree['new_bool_branch'].array().tolist() == [True, False]
     finally:
         if os.path.isfile(new_filename):
             os.remove(new_filename)
@@ -174,7 +193,10 @@ def test_new_vector_branch():
     original_tree = original_file[treename]
     new_filename = tempfile.mkstemp(suffix='.root', dir=os.getcwd())[1]
     try:
-        new_branch_dictionary = {'new_int_vector_branch': awkward.fromiter([[1], [2, 3], []]).astype(np.dtype('int32'))}
+        new_branch_dictionary = {'new_int16_vector_branch': awkward.fromiter([[-1], [-2, 3], []]).astype(np.dtype('int16')),
+                                 'new_int32_vector_branch': awkward.fromiter([[-4], [-5, 6], []]).astype(np.dtype('int32')),
+                                 'new_float32_vector_branch': awkward.fromiter([[-7.7], [-8.8, 9.9], []]).astype(np.dtype('float32')),
+                                 'new_float64_vector_branch': awkward.fromiter([[-10.10], [-11.11, 12.12], []]).astype(np.dtype('float64'))}
         clone_tree(original_tree, new_filename, new_branches=new_branch_dictionary)
         new_file = uproot.open(new_filename)
         new_tree = new_file[treename]
@@ -185,7 +207,14 @@ def test_new_vector_branch():
         assert abs(new_tree['double_vector_branch'].array() - awkward.fromiter([[],
                                                                                 [-10.10, 11.11, 12.12],
                                                                                 [16.16]])).max().max() < 1e-5
-        assert new_tree['new_int_vector_branch'].array().tolist() == [[1], [2, 3], []]
+        assert new_tree['new_int16_vector_branch'].array()[0].dtype == np.dtype('int16')
+        assert new_tree['new_int16_vector_branch'].array().tolist() == [[-1], [-2, 3], []]
+        assert new_tree['new_int32_vector_branch'].array()[0].dtype == np.dtype('int32')
+        assert new_tree['new_int32_vector_branch'].array().tolist() == [[-4], [-5, 6], []]
+        assert new_tree['new_float32_vector_branch'].array()[0].dtype == np.dtype('float32')
+        assert abs(new_tree['new_float32_vector_branch'].array() - awkward.fromiter([[-7.7], [-8.8, 9.9], []])).max().max() < 1e-5
+        assert new_tree['new_float64_vector_branch'].array()[0].dtype == np.dtype('float64')
+        assert abs(new_tree['new_float64_vector_branch'].array() - awkward.fromiter([[-10.10], [-11.11, 12.12], []])).max().max() < 1e-5
     finally:
         if os.path.isfile(new_filename):
             os.remove(new_filename)
