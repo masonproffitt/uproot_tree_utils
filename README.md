@@ -6,7 +6,7 @@ A small collection of utilities for handling ROOT TTrees with uproot.
 
 ## Usage
 
-The only function currently in the package is `clone_tree()`. The full function signature is
+There are two functions currently in the package. The first is `clone_tree`:
 
 ```python
 clone_tree(tree, new_filename, new_treename=None, branches=None, selection=None, new_branches=None)
@@ -28,6 +28,18 @@ This will simply copy the entire tree from the original file to a new file (with
 - `branches` can be a list of strings representing the branches to copy. Only the selected branches will be in the new file.
 - `selection` is an optional array determining which events to copy. This can be a boolean mask or integers corresponding to the desired event indices.
 - `new_branches` allows the user to pass a dictionary of new branches to insert into the tree. The format for the dictionary should be `{'new_branchname': array_with_branch_data}`.
+
+The other function available is `write_tree`:
+
+```python
+write_tree(branches, filename, treename)
+```
+
+This function will create a new tree entirely composed of arrays passed to it.
+
+- `branches` is a dictionary with items of the form `'branchname': array_with_branch_data`
+- `filename` is the name of a new file to put the tree in
+- `treename` is the name of the new tree
 
 ## Limitations
 
