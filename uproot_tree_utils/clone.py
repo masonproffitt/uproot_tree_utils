@@ -4,6 +4,25 @@ import uproot
 
 
 def clone_tree(tree, new_filename, new_treename=None, branches=None, selection=None, new_branches=None):
+    """
+    Copy a TTree to a new ROOT file.
+
+    Parameters
+    ----------
+    tree : TTree
+        TTree to copy from.
+    new_filename : str
+        Pathname of new ROOT file.
+    new_treename : str, optional
+        Name of new TTree. If `None`, the new tree receives the same name as the old tree.
+    branches : list or tuple of strings, optional
+        List of branchnames to copy. If `None`, all branches are copied.
+    selection : array_like, optional
+        . Boolean mask or int array of entry indices to copy. If `None`, all entries are copied.
+    new_branches : dict, optional
+        Dictionary of `branchname: branch_data` pairs to insert into the new tree.
+    """
+
     if new_treename is None:
         new_treename = tree.name.decode('utf-8')
     if branches is None:

@@ -4,6 +4,18 @@ import uproot
 
 
 def write_tree(branches, filename, treename):
+    """
+    Write a TTree to a new ROOT file from a collection of arrays.
+
+    Parameters
+    ----------
+    branches : dict
+        Dictionary of `branchname: branch_data` pairs.
+    filename : str
+        Pathname of new ROOT file.
+    treename : str
+        Name of new TTree.
+    """
     branch_definition_dictionary = dict()
     branch_content_dictionary = dict()
     for name, content in branches.items():
