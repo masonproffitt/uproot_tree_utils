@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(name='uproot_tree_utils',
-                 version=0.1,
+                 version=0.2,
                  description='A small collection of utilities for handling ROOT TTrees with uproot.',
                  long_description=long_description,
                  long_description_content_type="text/markdown",
